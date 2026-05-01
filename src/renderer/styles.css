@@ -1,0 +1,103 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --border: #1e1e1e;
+  --text: #e8e8e8;
+  --text-dim: #666;
+  --accent: #ff4d00;
+  --accent-glow: rgba(255, 77, 0, 0.15);
+  --radius: 8px;
+  --font: 'Segoe UI', -apple-system, system-ui, sans-serif;
+  --mono: 'Cascadia Code', 'Fira Code', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Titlebar */
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  -webkit-app-region: drag;
+}
+
+.titlebar__name {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.titlebar__controls {
+  display: flex;
+  gap: 2px;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar__btn {
+  width: 32px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.titlebar__btn:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.titlebar__btn--close:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 36px);
+  gap: 12px;
+}
+
+.hero__title {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--accent);
+}
+
+.hero__sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+}
