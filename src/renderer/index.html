@@ -17,10 +17,44 @@
   </header>
 
   <main id="app">
-    <div class="hero">
-      <h1 class="hero__title">Nudger</h1>
-      <p class="hero__sub">Stay focused. Get nudged.</p>
-    </div>
+    <!-- Session List View -->
+    <section class="view view--list" id="view-list">
+      <div class="view__header">
+        <h2 class="view__title">Sessions</h2>
+        <button class="btn btn--accent" id="btn-new-session">+ New</button>
+      </div>
+      <div class="session-list" id="session-list">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-state__icon">&#9711;</div>
+          <p class="empty-state__text">No sessions yet</p>
+          <p class="empty-state__hint">Create one to start getting nudged</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Session Form View -->
+    <section class="view view--form hidden" id="view-form">
+      <div class="view__header">
+        <button class="btn btn--ghost" id="btn-back">&larr; Back</button>
+        <h2 class="view__title" id="form-title">New Session</h2>
+      </div>
+      <form class="session-form" id="session-form">
+        <div class="field">
+          <label class="field__label" for="field-name">Name</label>
+          <input class="field__input" type="text" id="field-name" placeholder="Deep work block" required maxlength="60">
+        </div>
+        <div class="field">
+          <label class="field__label" for="field-interval">Interval (minutes)</label>
+          <input class="field__input" type="number" id="field-interval" placeholder="25" required min="1" max="480" step="1">
+        </div>
+        <div class="field">
+          <label class="field__label" for="field-message">Nudge message</label>
+          <textarea class="field__input field__textarea" id="field-message" placeholder="Are you still on track?" required maxlength="200" rows="3"></textarea>
+        </div>
+        <input type="hidden" id="field-id">
+        <button class="btn btn--accent btn--full" type="submit" id="btn-save">Create Session</button>
+      </form>
+    </section>
   </main>
 
   <script src="app.js"></script>
