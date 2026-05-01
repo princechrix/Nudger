@@ -11,4 +11,14 @@ contextBridge.exposeInMainWorld('nudger', {
     update: (id, updates) => ipcRenderer.invoke('sessions:update', id, updates),
     delete: (id) => ipcRenderer.invoke('sessions:delete', id),
   },
+
+  engine: {
+    start: (sessionId) => ipcRenderer.invoke('engine:start', sessionId),
+    stop: () => ipcRenderer.invoke('engine:stop'),
+    status: () => ipcRenderer.invoke('engine:status'),
+  },
+
+  onNudge: (callback) => {
+    ipcRenderer.on('nudge:triggered', (_e, session) => callback(session));
+  },
 });
