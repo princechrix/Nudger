@@ -38,6 +38,7 @@ function createOverlayForDisplay(display, session) {
     overlay.webContents.send('overlay:data', {
       message: session.message,
       name: session.name,
+      nudgeDuration: session.nudgeDuration || 5,
     });
   });
 

@@ -31,12 +31,13 @@ function getSession(id) {
   return sessions.find((s) => s.id === id) || null;
 }
 
-function createSession({ name, interval, message }) {
+function createSession({ name, interval, nudgeDuration, message }) {
   const sessions = readSessions();
   const session = {
     id: crypto.randomUUID(),
     name: name.trim(),
     interval: Math.max(1, Number(interval)),
+    nudgeDuration: Math.max(3, Number(nudgeDuration) || 5),
     message: message.trim(),
     createdAt: Date.now(),
   };
@@ -52,6 +53,7 @@ function updateSession(id, updates) {
 
   if (updates.name !== undefined) sessions[idx].name = updates.name.trim();
   if (updates.interval !== undefined) sessions[idx].interval = Math.max(1, Number(updates.interval));
+  if (updates.nudgeDuration !== undefined) sessions[idx].nudgeDuration = Math.max(3, Number(updates.nudgeDuration) || 5);
   if (updates.message !== undefined) sessions[idx].message = updates.message.trim();
 
   writeSessions(sessions);

@@ -9,6 +9,7 @@ const btnSave = $('#btn-save');
 const fieldId = $('#field-id');
 const fieldName = $('#field-name');
 const fieldInterval = $('#field-interval');
+const fieldNudgeDuration = $('#field-nudge-duration');
 const fieldMessage = $('#field-message');
 
 let activeSessionId = null;
@@ -49,7 +50,7 @@ async function renderSessions() {
     card.innerHTML = `
       <div class="session-card__top">
         <span class="session-card__name">${escapeHtml(session.name)}</span>
-        <span class="session-card__interval">${session.interval}m</span>
+        <span class="session-card__interval">${session.interval}m / ${session.nudgeDuration || 5}s lock</span>
       </div>
       <div class="session-card__message">${escapeHtml(session.message)}</div>
       <div class="session-card__actions">
@@ -92,6 +93,7 @@ sessionList.addEventListener('click', async (e) => {
     fieldId.value = session.id;
     fieldName.value = session.name;
     fieldInterval.value = session.interval;
+    fieldNudgeDuration.value = session.nudgeDuration || 5;
     fieldMessage.value = session.message;
     formTitle.textContent = 'Edit Session';
     btnSave.textContent = 'Save Changes';
@@ -115,6 +117,7 @@ form.addEventListener('submit', async (e) => {
   const data = {
     name: fieldName.value,
     interval: Number(fieldInterval.value),
+    nudgeDuration: Number(fieldNudgeDuration.value),
     message: fieldMessage.value,
   };
 

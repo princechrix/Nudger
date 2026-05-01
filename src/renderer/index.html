@@ -44,8 +44,14 @@
           <input class="field__input" type="text" id="field-name" placeholder="Deep work block" required maxlength="60">
         </div>
         <div class="field">
-          <label class="field__label" for="field-interval">Interval (minutes)</label>
+          <label class="field__label" for="field-interval">Session interval (minutes)</label>
+          <span class="field__hint">How often you get nudged</span>
           <input class="field__input" type="number" id="field-interval" placeholder="25" required min="1" max="480" step="1">
+        </div>
+        <div class="field">
+          <label class="field__label" for="field-nudge-duration">Nudge lock duration (seconds)</label>
+          <span class="field__hint">How long the overlay stays locked before you can dismiss</span>
+          <input class="field__input" type="number" id="field-nudge-duration" placeholder="5" required min="3" max="120" step="1">
         </div>
         <div class="field">
           <label class="field__label" for="field-message">Nudge message</label>
