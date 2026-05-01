@@ -9,14 +9,23 @@
 :root {
   --bg: #0a0a0a;
   --surface: #141414;
+  --surface-hover: #1a1a1a;
   --border: #1e1e1e;
+  --border-focus: #333;
   --text: #e8e8e8;
   --text-dim: #666;
+  --text-muted: #444;
   --accent: #ff4d00;
-  --accent-glow: rgba(255, 77, 0, 0.15);
+  --accent-hover: #ff6a2a;
+  --accent-dim: rgba(255, 77, 0, 0.1);
+  --danger: #e81123;
+  --danger-hover: #ff2d3b;
+  --success: #22c55e;
   --radius: 8px;
+  --radius-sm: 6px;
   --font: 'Segoe UI', -apple-system, system-ui, sans-serif;
   --mono: 'Cascadia Code', 'Fira Code', monospace;
+  --transition: 0.15s ease;
 }
 
 html, body {
@@ -28,7 +37,7 @@ html, body {
   user-select: none;
 }
 
-/* Titlebar */
+/* ── Titlebar ── */
 .titlebar {
   display: flex;
   align-items: center;
@@ -41,9 +50,9 @@ html, body {
 }
 
 .titlebar__name {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text-dim);
 }
@@ -66,7 +75,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--transition), color var(--transition);
 }
 
 .titlebar__btn:hover {
@@ -75,29 +84,292 @@ html, body {
 }
 
 .titlebar__btn--close:hover {
-  background: #e81123;
+  background: var(--danger);
   color: #fff;
 }
 
-/* Hero */
-.hero {
+/* ── Views ── */
+#app {
+  height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+.view {
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.view.hidden {
+  display: none;
+}
+
+.view__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.view__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Buttons ── */
+.btn {
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+  letter-spacing: 0.2px;
+}
+
+.btn--accent {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+}
+
+.btn--accent:hover {
+  background: var(--accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-dim);
+  padding: 8px 12px;
+}
+
+.btn--ghost:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.btn--full {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.btn--small {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--text-dim);
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.btn--danger:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn--start {
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.btn--start:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--stop {
+  background: rgba(232, 17, 35, 0.1);
+  color: var(--danger);
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.btn--stop:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* ── Empty State ── */
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 36px);
-  gap: 12px;
+  padding: 60px 20px;
+  gap: 8px;
 }
 
-.hero__title {
-  font-size: 42px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  color: var(--accent);
+.empty-state__icon {
+  font-size: 36px;
+  color: var(--text-muted);
+  line-height: 1;
 }
 
-.hero__sub {
+.empty-state__text {
   font-size: 14px;
+  font-weight: 600;
   color: var(--text-dim);
-  letter-spacing: 0.3px;
+}
+
+.empty-state__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Session Cards ── */
+.session-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  transition: border-color var(--transition);
+}
+
+.session-card:hover {
+  border-color: var(--border-focus);
+}
+
+.session-card--active {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--surface), var(--accent-dim));
+}
+
+.session-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.session-card__name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--text);
+}
+
+.session-card__interval {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--mono);
+  letter-spacing: 0.5px;
+}
+
+.session-card__message {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-card__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.session-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--success);
+  margin-right: auto;
+  padding: 4px 0;
+}
+
+.session-card__status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Form ── */
+.session-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+.field__input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.field__input::placeholder {
+  color: var(--text-muted);
+}
+
+.field__input:focus {
+  border-color: var(--accent);
+}
+
+.field__textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
