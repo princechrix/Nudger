@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const sessionManager = require('./sessionManager');
 const nudgeEngine = require('./nudgeEngine');
+const windowManager = require('./windowManager');
 
 let mainWindow = null;
 
@@ -46,6 +47,7 @@ ipcMain.handle('engine:start', (_e, sessionId) => {
   const session = sessionManager.getSession(sessionId);
   if (!session) return { ok: false };
   nudgeEngine.start(session, (s) => {
+    windowManager.showOverlay(s);
     mainWindow?.webContents.send('nudge:triggered', s);
   });
   return { ok: true, session };
@@ -60,6 +62,10 @@ ipcMain.handle('engine:status', () => ({
   running: nudgeEngine.isRunning(),
   session: nudgeEngine.getActive(),
 }));
+
+ipcMain.on('overlay:dismiss', () => {
+  windowManager.closeOverlay();
+});
 
 app.whenReady().then(createMainWindow);
 
