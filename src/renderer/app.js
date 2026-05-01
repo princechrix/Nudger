@@ -75,11 +75,13 @@ sessionList.addEventListener('click', async (e) => {
   const deleteId = btn.dataset.delete;
 
   if (startId) {
-    activeSessionId = startId;
+    const result = await window.nudger.engine.start(startId);
+    if (result.ok) activeSessionId = startId;
     await renderSessions();
   }
 
   if (stopId) {
+    await window.nudger.engine.stop();
     activeSessionId = null;
     await renderSessions();
   }
@@ -97,7 +99,10 @@ sessionList.addEventListener('click', async (e) => {
   }
 
   if (deleteId) {
-    if (activeSessionId === deleteId) activeSessionId = null;
+    if (activeSessionId === deleteId) {
+      await window.nudger.engine.stop();
+      activeSessionId = null;
+    }
     await window.nudger.sessions.delete(deleteId);
     await renderSessions();
   }
@@ -130,5 +135,20 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// ── Nudge Listener ──
+window.nudger.onNudge((session) => {
+  // Overlay will be implemented in feature/fullscreen-overlay
+  // For now, log to confirm the engine fires correctly
+  console.log('NUDGE:', session.message);
+});
+
 // ── Init ──
-renderSessions();
+async function init() {
+  const status = await window.nudger.engine.status();
+  if (status.running && status.session) {
+    activeSessionId = status.session.id;
+  }
+  await renderSessions();
+}
+
+init();

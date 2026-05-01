@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const sessionManager = require('./sessionManager');
+const nudgeEngine = require('./nudgeEngine');
 
 let mainWindow = null;
 
@@ -40,6 +41,25 @@ ipcMain.handle('sessions:get', (_e, id) => sessionManager.getSession(id));
 ipcMain.handle('sessions:create', (_e, data) => sessionManager.createSession(data));
 ipcMain.handle('sessions:update', (_e, id, updates) => sessionManager.updateSession(id, updates));
 ipcMain.handle('sessions:delete', (_e, id) => sessionManager.deleteSession(id));
+
+ipcMain.handle('engine:start', (_e, sessionId) => {
+  const session = sessionManager.getSession(sessionId);
+  if (!session) return { ok: false };
+  nudgeEngine.start(session, (s) => {
+    mainWindow?.webContents.send('nudge:triggered', s);
+  });
+  return { ok: true, session };
+});
+
+ipcMain.handle('engine:stop', () => {
+  nudgeEngine.stop();
+  return { ok: true };
+});
+
+ipcMain.handle('engine:status', () => ({
+  running: nudgeEngine.isRunning(),
+  session: nudgeEngine.getActive(),
+}));
 
 app.whenReady().then(createMainWindow);
 
