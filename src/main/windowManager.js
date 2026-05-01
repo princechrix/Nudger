@@ -2,6 +2,7 @@ const { BrowserWindow, screen } = require('electron');
 const path = require('path');
 
 let overlayWindows = [];
+let refocusInterval = null;
 
 function createOverlayForDisplay(display, session) {
   const { x, y, width, height } = display.bounds;
@@ -56,9 +57,22 @@ function showOverlay(session) {
     const overlay = createOverlayForDisplay(display, session);
     overlayWindows.push(overlay);
   });
+
+  refocusInterval = setInterval(() => {
+    overlayWindows.forEach((w) => {
+      if (!w.isDestroyed() && !w.isFocused()) {
+        w.setAlwaysOnTop(true, 'screen-saver');
+        w.focus();
+      }
+    });
+  }, 500);
 }
 
 function closeOverlay() {
+  if (refocusInterval) {
+    clearInterval(refocusInterval);
+    refocusInterval = null;
+  }
   overlayWindows.forEach((w) => {
     if (!w.isDestroyed()) w.destroy();
   });

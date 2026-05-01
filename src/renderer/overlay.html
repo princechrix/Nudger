@@ -12,8 +12,12 @@
       --bg: #0a0a0a;
       --text: #e8e8e8;
       --text-dim: #666;
+      --text-muted: #444;
       --accent: #ff4d00;
+      --accent-glow: rgba(255, 77, 0, 0.08);
+      --danger: #e81123;
       --font: 'Segoe UI', -apple-system, system-ui, sans-serif;
+      --mono: 'Cascadia Code', 'Fira Code', monospace;
     }
 
     html, body {
@@ -32,7 +36,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 32px;
+      gap: 24px;
       animation: fadeIn 0.3s ease;
     }
 
@@ -59,8 +63,72 @@
       color: var(--text-dim);
     }
 
+    .overlay__countdown {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+      height: 18px;
+    }
+
+    .overlay__ack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay__ack.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overlay__ack-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .overlay__type-input {
+      width: 200px;
+      padding: 10px 14px;
+      background: transparent;
+      border: 2px solid var(--text-muted);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .overlay__type-input::placeholder {
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      font-size: 14px;
+    }
+
+    .overlay__type-input:focus {
+      border-color: var(--accent);
+    }
+
+    .overlay__type-input.error {
+      border-color: var(--danger);
+      animation: shake 0.3s ease;
+    }
+
+    .overlay__type-input.success {
+      border-color: var(--accent);
+    }
+
     .overlay__dismiss {
-      margin-top: 16px;
       padding: 14px 48px;
       border: 2px solid var(--accent);
       background: transparent;
@@ -73,30 +141,29 @@
       cursor: pointer;
       border-radius: 6px;
       transition: all 0.2s ease;
-      opacity: 0;
-      pointer-events: none;
     }
 
-    .overlay__dismiss.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .overlay__dismiss.active:hover {
+    .overlay__dismiss:hover {
       background: var(--accent);
       color: #fff;
     }
 
-    .overlay__countdown {
-      font-size: 12px;
-      color: var(--text-dim);
-      font-variant-numeric: tabular-nums;
-      height: 18px;
+    .overlay__or {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
     }
   </style>
 </head>
@@ -106,7 +173,13 @@
     <p class="overlay__message" id="message"></p>
     <span class="overlay__session" id="session-name"></span>
     <span class="overlay__countdown" id="countdown"></span>
-    <button class="overlay__dismiss" id="btn-dismiss">I'm on it</button>
+
+    <div class="overlay__ack" id="ack-area">
+      <span class="overlay__ack-hint">Type <strong>DONE</strong> to dismiss</span>
+      <input class="overlay__type-input" id="type-input" type="text" placeholder="DONE" maxlength="4" autocomplete="off" spellcheck="false">
+      <span class="overlay__or">or</span>
+      <button class="overlay__dismiss" id="btn-dismiss">I'm on it</button>
+    </div>
   </div>
   <script src="overlayApp.js"></script>
 </body>
