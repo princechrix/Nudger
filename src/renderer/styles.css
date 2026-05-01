@@ -331,6 +331,12 @@ html, body {
   color: var(--text-dim);
 }
 
+.field__hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: -2px;
+}
+
 .field__input {
   background: var(--surface);
   border: 1px solid var(--border);

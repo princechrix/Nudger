@@ -1,4 +1,3 @@
-const DISMISS_DELAY = 5;
 const CONFIRM_WORD = 'DONE';
 
 const messageEl = document.getElementById('message');
@@ -8,12 +7,15 @@ const ackArea = document.getElementById('ack-area');
 const typeInput = document.getElementById('type-input');
 const btnDismiss = document.getElementById('btn-dismiss');
 
-let remaining = DISMISS_DELAY;
+let remaining = 5;
 let unlocked = false;
 
 window.overlay.onData((data) => {
   messageEl.textContent = data.message;
   sessionNameEl.textContent = data.name;
+  remaining = data.nudgeDuration || 5;
+
+  countdownEl.textContent = `Dismiss available in ${remaining}s`;
 
   const tick = setInterval(() => {
     remaining--;
@@ -27,8 +29,6 @@ window.overlay.onData((data) => {
       typeInput.focus();
     }
   }, 1000);
-
-  countdownEl.textContent = `Dismiss available in ${remaining}s`;
 });
 
 typeInput.addEventListener('input', () => {
