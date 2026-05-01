@@ -5,8 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
   <title>Nudger</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="app"></div>
+  <header class="titlebar" id="titlebar">
+    <span class="titlebar__name">Nudger</span>
+    <div class="titlebar__controls">
+      <button class="titlebar__btn titlebar__btn--minimize" id="btn-minimize">&minus;</button>
+      <button class="titlebar__btn titlebar__btn--close" id="btn-close">&times;</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <div class="hero">
+      <h1 class="hero__title">Nudger</h1>
+      <p class="hero__sub">Stay focused. Get nudged.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
