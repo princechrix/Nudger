@@ -3,11 +3,8 @@ const path = require('path');
 
 let overlayWindows = [];
 
-function showOverlay(session) {
-  closeOverlay();
-
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const { x, y, width, height } = primaryDisplay.bounds;
+function createOverlayForDisplay(display, session) {
+  const { x, y, width, height } = display.bounds;
 
   const overlay = new BrowserWindow({
     x,
@@ -44,10 +41,21 @@ function showOverlay(session) {
   });
 
   overlay.on('blur', () => {
-    overlay.focus();
+    if (!overlay.isDestroyed()) overlay.focus();
   });
 
-  overlayWindows.push(overlay);
+  return overlay;
+}
+
+function showOverlay(session) {
+  closeOverlay();
+
+  const displays = screen.getAllDisplays();
+
+  displays.forEach((display) => {
+    const overlay = createOverlayForDisplay(display, session);
+    overlayWindows.push(overlay);
+  });
 }
 
 function closeOverlay() {
