@@ -1,15 +1,23 @@
 const CONFIRM_WORD = 'DONE';
+const RING_RADIUS = 48;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 const messageEl = document.getElementById('message');
 const sessionNameEl = document.getElementById('session-name');
-const countdownEl = document.getElementById('countdown');
+const ringWrap = document.getElementById('ring-wrap');
+const ringFill = document.getElementById('ring-fill');
+const ringText = document.getElementById('ring-text');
 const ackArea = document.getElementById('ack-area');
 const typeInput = document.getElementById('type-input');
 const btnDismiss = document.getElementById('btn-dismiss');
 
 let remaining = 5;
+let totalDuration = 5;
 let unlocked = false;
 let audio = null;
+
+ringFill.style.strokeDasharray = RING_CIRCUMFERENCE;
+ringFill.style.strokeDashoffset = RING_CIRCUMFERENCE;
 
 function startRingtone(url) {
   if (!url) return;
@@ -25,27 +33,40 @@ function stopRingtone() {
   audio = null;
 }
 
+function updateRing() {
+  const elapsed = totalDuration - remaining;
+  const progress = elapsed / totalDuration;
+  const offset = RING_CIRCUMFERENCE * (1 - progress);
+  ringFill.style.strokeDashoffset = offset;
+  ringText.textContent = remaining;
+}
+
 window.addEventListener('nudger:stop-audio', stopRingtone);
 
 window.overlay.onData((data) => {
   messageEl.textContent = data.message;
   sessionNameEl.textContent = data.name;
   remaining = data.nudgeDuration || 5;
+  totalDuration = remaining;
 
   startRingtone(data.ringtoneUrl);
-
-  countdownEl.textContent = `Dismiss available in ${remaining}s`;
+  updateRing();
 
   const tick = setInterval(() => {
     remaining--;
     if (remaining > 0) {
-      countdownEl.textContent = `Dismiss available in ${remaining}s`;
+      updateRing();
     } else {
       clearInterval(tick);
-      countdownEl.textContent = '';
-      unlocked = true;
-      ackArea.classList.add('active');
-      typeInput.focus();
+      ringFill.style.strokeDashoffset = 0;
+      ringText.textContent = '';
+
+      setTimeout(() => {
+        ringWrap.classList.add('hidden');
+        unlocked = true;
+        ackArea.classList.add('active');
+        typeInput.focus();
+      }, 300);
     }
   }, 1000);
 });

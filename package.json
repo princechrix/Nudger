@@ -7,7 +7,9 @@
     "start": "electron .",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "build": "electron-builder --win",
+    "build": "electron-builder --win --mac",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
     "pack": "electron-builder --dir"
   },
   "author": "Prince Chrix",
@@ -27,6 +29,10 @@
     },
     "win": {
       "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity"
     }
   },
   "packageManager": "pnpm@10.15.0",
