@@ -57,6 +57,16 @@
           <label class="field__label" for="field-message">Nudge message</label>
           <textarea class="field__input field__textarea" id="field-message" placeholder="Are you still on track?" required maxlength="200" rows="3"></textarea>
         </div>
+        <div class="field">
+          <label class="field__label">Ringtone</label>
+          <span class="field__hint">Audio file to loop during nudge (optional)</span>
+          <div class="ringtone-picker">
+            <button class="btn btn--ghost ringtone-picker__btn" type="button" id="btn-pick-ringtone">Choose file...</button>
+            <span class="ringtone-picker__name" id="ringtone-name">None</span>
+            <button class="btn btn--danger ringtone-picker__clear hidden" type="button" id="btn-clear-ringtone">&times;</button>
+          </div>
+          <input type="hidden" id="field-ringtone">
+        </div>
         <input type="hidden" id="field-id">
         <button class="btn btn--accent btn--full" type="submit" id="btn-save">Create Session</button>
       </form>

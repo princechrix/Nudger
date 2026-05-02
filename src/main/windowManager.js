@@ -35,10 +35,14 @@ function createOverlayForDisplay(display, session) {
   overlay.loadFile(path.join(__dirname, '..', 'renderer', 'overlay.html'));
 
   overlay.webContents.on('did-finish-load', () => {
+    const ringtoneUrl = (session.ringtone && !session.muted)
+      ? 'nudger-media://file/' + encodeURIComponent(session.ringtone)
+      : null;
     overlay.webContents.send('overlay:data', {
       message: session.message,
       name: session.name,
       nudgeDuration: session.nudgeDuration || 5,
+      ringtoneUrl,
     });
   });
 

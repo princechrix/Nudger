@@ -9,11 +9,30 @@ const btnDismiss = document.getElementById('btn-dismiss');
 
 let remaining = 5;
 let unlocked = false;
+let audio = null;
+
+function startRingtone(url) {
+  if (!url) return;
+  audio = new Audio(url);
+  audio.loop = true;
+  audio.play().catch(() => {});
+}
+
+function stopRingtone() {
+  if (!audio) return;
+  audio.pause();
+  audio.src = '';
+  audio = null;
+}
+
+window.addEventListener('nudger:stop-audio', stopRingtone);
 
 window.overlay.onData((data) => {
   messageEl.textContent = data.message;
   sessionNameEl.textContent = data.name;
   remaining = data.nudgeDuration || 5;
+
+  startRingtone(data.ringtoneUrl);
 
   countdownEl.textContent = `Dismiss available in ${remaining}s`;
 
