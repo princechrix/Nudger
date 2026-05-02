@@ -9,10 +9,21 @@
 </head>
 <body>
   <header class="titlebar" id="titlebar">
-    <span class="titlebar__name">Nudger</span>
+    <div class="titlebar__brand">
+      <svg class="titlebar__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="12" x2="15" y2="14"/>
+      </svg>
+      <span class="titlebar__name">Nudger</span>
+    </div>
     <div class="titlebar__controls">
-      <button class="titlebar__btn titlebar__btn--minimize" id="btn-minimize">&minus;</button>
-      <button class="titlebar__btn titlebar__btn--close" id="btn-close">&times;</button>
+      <button class="titlebar__btn titlebar__btn--minimize" id="btn-minimize">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="12" x2="18" y2="12"/></svg>
+      </button>
+      <button class="titlebar__btn titlebar__btn--close" id="btn-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="7" x2="17" y2="17"/><line x1="17" y1="7" x2="7" y2="17"/></svg>
+      </button>
     </div>
   </header>
 
@@ -21,11 +32,20 @@
     <section class="view view--list" id="view-list">
       <div class="view__header">
         <h2 class="view__title">Sessions</h2>
-        <button class="btn btn--accent" id="btn-new-session">+ New</button>
+        <button class="btn btn--accent" id="btn-new-session">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New
+        </button>
       </div>
       <div class="session-list" id="session-list">
         <div class="empty-state" id="empty-state">
-          <div class="empty-state__icon">&#9711;</div>
+          <div class="empty-state__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="12" x2="15" y2="14"/>
+            </svg>
+          </div>
           <p class="empty-state__text">No sessions yet</p>
           <p class="empty-state__hint">Create one to start getting nudged</p>
         </div>
@@ -35,38 +55,58 @@
     <!-- Session Form View -->
     <section class="view view--form hidden" id="view-form">
       <div class="view__header">
-        <button class="btn btn--ghost" id="btn-back">&larr; Back</button>
+        <button class="btn btn--ghost" id="btn-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back
+        </button>
         <h2 class="view__title" id="form-title">New Session</h2>
       </div>
       <form class="session-form" id="session-form">
-        <div class="field">
-          <label class="field__label" for="field-name">Name</label>
-          <input class="field__input" type="text" id="field-name" placeholder="Deep work block" required maxlength="60">
-        </div>
-        <div class="field">
-          <label class="field__label" for="field-interval">Session interval (minutes)</label>
-          <span class="field__hint">How often you get nudged</span>
-          <input class="field__input" type="number" id="field-interval" placeholder="25" required min="1" max="480" step="1">
-        </div>
-        <div class="field">
-          <label class="field__label" for="field-nudge-duration">Nudge lock duration (seconds)</label>
-          <span class="field__hint">How long the overlay stays locked before you can dismiss</span>
-          <input class="field__input" type="number" id="field-nudge-duration" placeholder="5" required min="3" max="120" step="1">
-        </div>
-        <div class="field">
-          <label class="field__label" for="field-message">Nudge message</label>
-          <textarea class="field__input field__textarea" id="field-message" placeholder="Are you still on track?" required maxlength="200" rows="3"></textarea>
-        </div>
-        <div class="field">
-          <label class="field__label">Ringtone</label>
-          <span class="field__hint">Audio file to loop during nudge (optional)</span>
-          <div class="ringtone-picker">
-            <button class="btn btn--ghost ringtone-picker__btn" type="button" id="btn-pick-ringtone">Choose file...</button>
-            <span class="ringtone-picker__name" id="ringtone-name">None</span>
-            <button class="btn btn--danger ringtone-picker__clear hidden" type="button" id="btn-clear-ringtone">&times;</button>
+        <div class="form-group">
+          <span class="form-group__label">Identity</span>
+          <div class="field">
+            <label class="field__label" for="field-name">Session name</label>
+            <input class="field__input" type="text" id="field-name" placeholder="Deep work block" required maxlength="60">
           </div>
-          <input type="hidden" id="field-ringtone">
+          <div class="field">
+            <label class="field__label" for="field-message">Nudge message</label>
+            <textarea class="field__input field__textarea" id="field-message" placeholder="Are you still on track?" required maxlength="200" rows="3"></textarea>
+          </div>
         </div>
+
+        <div class="form-group">
+          <span class="form-group__label">Timing</span>
+          <div class="field">
+            <label class="field__label" for="field-interval">Interval (minutes)</label>
+            <span class="field__hint">How often you get nudged</span>
+            <input class="field__input" type="number" id="field-interval" placeholder="25" required min="1" max="480" step="1">
+          </div>
+          <div class="field">
+            <label class="field__label" for="field-nudge-duration">Lock duration (seconds)</label>
+            <span class="field__hint">Overlay stays locked before dismiss is allowed</span>
+            <input class="field__input" type="number" id="field-nudge-duration" placeholder="5" required min="3" max="120" step="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <span class="form-group__label">Sound</span>
+          <div class="field">
+            <label class="field__label">Ringtone</label>
+            <span class="field__hint">Audio file to loop during nudge (optional)</span>
+            <div class="ringtone-picker">
+              <div class="ringtone-picker__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+              </div>
+              <span class="ringtone-picker__name ringtone-picker__name--empty" id="ringtone-name">None selected</span>
+              <button class="btn btn--ghost ringtone-picker__btn" type="button" id="btn-pick-ringtone">Browse</button>
+              <button class="ringtone-picker__clear hidden" type="button" id="btn-clear-ringtone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" id="field-ringtone">
         <input type="hidden" id="field-id">
         <button class="btn btn--accent btn--full" type="submit" id="btn-save">Create Session</button>
       </form>
