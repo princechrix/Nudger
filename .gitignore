@@ -10,8 +10,6 @@ build/
 *.asar
 
 # Environment
-.env
-.env.local
 .env.*.local
 
 # IDE
@@ -41,3 +39,4 @@ storage/*.json
 # Bundle artifacts
 *.bundle
 .claude/
+config.bat

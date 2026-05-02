@@ -9,15 +9,17 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #0a0a0a;
-      --text: #e8e8e8;
-      --text-dim: #666;
-      --text-muted: #444;
-      --accent: #ff4d00;
-      --accent-glow: rgba(255, 77, 0, 0.08);
-      --danger: #e81123;
-      --font: 'Segoe UI', -apple-system, system-ui, sans-serif;
-      --mono: 'Cascadia Code', 'Fira Code', monospace;
+      --bg: #08080a;
+      --text: #e4e4ea;
+      --text-dim: #6e6e7a;
+      --text-muted: #3c3c46;
+      --accent: #c4972e;
+      --accent-text: #dbb24a;
+      --accent-glow: rgba(196, 151, 46, 0.15);
+      --danger: #b83a3a;
+      --font: 'Segoe UI Variable', 'Segoe UI', -apple-system, system-ui, sans-serif;
+      --mono: 'Cascadia Code', 'Cascadia Mono', 'Fira Code', monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     html, body {
@@ -28,62 +30,167 @@
       overflow: hidden;
       user-select: none;
       cursor: default;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* ── Atmosphere ── */
+    .overlay__bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 45%, rgba(196, 151, 46, 0.03) 0%, transparent 70%),
+        radial-gradient(circle at 50% 50%, rgba(12, 12, 16, 1) 0%, var(--bg) 100%);
+      z-index: 0;
+    }
+
+    .overlay__bg::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── Layout ── */
     .overlay {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 24px;
-      animation: fadeIn 0.3s ease;
+      gap: 0;
     }
 
+    /* ── Staggered entrance ── */
+    .overlay__label,
+    .overlay__message,
+    .overlay__session,
+    .overlay__ring-wrap,
+    .overlay__ack {
+      animation: revealUp 0.6s var(--ease) both;
+    }
+
+    .overlay__label      { animation-delay: 0.1s; }
+    .overlay__message    { animation-delay: 0.25s; }
+    .overlay__session    { animation-delay: 0.35s; }
+    .overlay__ring-wrap  { animation-delay: 0.45s; }
+
+    @keyframes revealUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Label ── */
     .overlay__label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      color: var(--accent);
+      letter-spacing: 4px;
+      color: var(--accent-text);
+      margin-bottom: 28px;
     }
 
+    /* ── Message ── */
     .overlay__message {
-      font-size: 32px;
+      font-size: clamp(26px, 3.5vw, 42px);
       font-weight: 700;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.8px;
       text-align: center;
-      max-width: 600px;
-      line-height: 1.3;
-      padding: 0 40px;
+      max-width: 640px;
+      line-height: 1.25;
+      padding: 0 48px;
+      margin-bottom: 12px;
     }
 
+    /* ── Session name ── */
     .overlay__session {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
-
-    .overlay__countdown {
       font-size: 12px;
+      font-weight: 500;
       color: var(--text-dim);
-      font-variant-numeric: tabular-nums;
-      height: 18px;
+      letter-spacing: 0.3px;
+      margin-bottom: 36px;
     }
 
+    /* ── Ring countdown ── */
+    .overlay__ring-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .overlay__ring-wrap.hidden {
+      display: none;
+    }
+
+    .overlay__ring {
+      position: absolute;
+      inset: 0;
+      width: 110px;
+      height: 110px;
+      transform: rotate(-90deg);
+    }
+
+    .overlay__ring-track {
+      fill: none;
+      stroke: var(--text-muted);
+      stroke-width: 2.5;
+      opacity: 0.3;
+    }
+
+    .overlay__ring-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+      filter: drop-shadow(0 0 6px var(--accent-glow));
+    }
+
+    .overlay__ring-text {
+      font-size: 24px;
+      font-weight: 700;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    .overlay__ring-label {
+      position: absolute;
+      bottom: -20px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    /* ── Acknowledgment ── */
     .overlay__ack {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-top: 8px;
+      gap: 14px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transform: translateY(8px);
+      transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
     }
 
     .overlay__ack.active {
       opacity: 1;
       pointer-events: auto;
+      transform: translateY(0);
     }
 
     .overlay__ack-hint {
@@ -92,99 +199,121 @@
       letter-spacing: 0.5px;
     }
 
+    .overlay__ack-hint strong {
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 2px;
+    }
+
     .overlay__type-input {
-      width: 200px;
-      padding: 10px 14px;
-      background: transparent;
+      width: 190px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
       border: 2px solid var(--text-muted);
-      border-radius: 6px;
+      border-radius: 8px;
       color: var(--text);
       font-family: var(--mono);
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       text-align: center;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       text-transform: uppercase;
       outline: none;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s var(--ease);
     }
 
     .overlay__type-input::placeholder {
       color: var(--text-muted);
-      letter-spacing: 4px;
-      font-size: 14px;
+      letter-spacing: 6px;
+      font-size: 15px;
     }
 
     .overlay__type-input:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+      background: rgba(196, 151, 46, 0.03);
     }
 
     .overlay__type-input.error {
       border-color: var(--danger);
-      animation: shake 0.3s ease;
+      animation: shake 0.35s var(--ease);
     }
 
     .overlay__type-input.success {
       border-color: var(--accent);
-    }
-
-    .overlay__dismiss {
-      padding: 14px 48px;
-      border: 2px solid var(--accent);
-      background: transparent;
-      color: var(--accent);
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .overlay__dismiss:hover {
-      background: var(--accent);
-      color: #fff;
+      box-shadow: 0 0 20px var(--accent-glow);
     }
 
     .overlay__or {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      font-weight: 600;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .overlay__dismiss {
+      padding: 12px 44px;
+      border: 1.5px solid var(--text-muted);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s var(--ease);
+    }
+
+    .overlay__dismiss:hover {
+      border-color: var(--accent);
+      color: var(--accent-text);
+      background: var(--accent-glow);
+      box-shadow: 0 0 20px rgba(196, 151, 46, 0.08);
     }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(3px); }
     }
 
+    /* ── Credit ── */
     .credit {
       position: fixed;
-      bottom: 12px;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--text-muted);
+      z-index: 3;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
+  <div class="overlay__bg"></div>
+
   <div class="overlay">
     <span class="overlay__label">Nudge</span>
     <p class="overlay__message" id="message"></p>
     <span class="overlay__session" id="session-name"></span>
-    <span class="overlay__countdown" id="countdown"></span>
+
+    <div class="overlay__ring-wrap" id="ring-wrap">
+      <svg class="overlay__ring" viewBox="0 0 110 110">
+        <circle class="overlay__ring-track" cx="55" cy="55" r="48"/>
+        <circle class="overlay__ring-fill" cx="55" cy="55" r="48" id="ring-fill"/>
+      </svg>
+      <span class="overlay__ring-text" id="ring-text"></span>
+      <span class="overlay__ring-label">locked</span>
+    </div>
 
     <div class="overlay__ack" id="ack-area">
       <span class="overlay__ack-hint">Type <strong>DONE</strong> to dismiss</span>
@@ -193,6 +322,7 @@
       <button class="overlay__dismiss" id="btn-dismiss">I'm on it</button>
     </div>
   </div>
+
   <footer class="credit">Developed by Prince Chrix</footer>
 
   <script src="overlayApp.js"></script>
