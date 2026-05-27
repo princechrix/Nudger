@@ -1,15 +1,15 @@
 {
   "name": "nudger",
   "version": "0.1.0",
-  "description": "Desktop focus tool — interruptive, fullscreen, multi-monitor nudges",
+  "description": "Desktop focus tool \u2014 interruptive, fullscreen, multi-monitor nudges",
   "main": "src/main/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "node init && electron .",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "build": "electron-builder --win --mac",
-    "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
+    "build": "node init && electron-builder --win --mac",
+    "build:win": "node init && electron-builder --win",
+    "build:mac": "node init && electron-builder --mac",
     "pack": "electron-builder --dir"
   },
   "author": "Prince Chrix",
@@ -37,6 +37,8 @@
   },
   "packageManager": "pnpm@10.15.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["electron"]
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
   }
 }
